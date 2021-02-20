@@ -6,6 +6,9 @@ use derive_more::{
 };
 use std::ops::{Add, Index, IndexMut, Mul, Sub};
 
+#[cfg(feature = "rand")]
+use rand::Rng;
+
 #[derive(
     Clone,
     Copy,
@@ -133,6 +136,21 @@ where
     }
 }
 
+impl<T> Vec3<T>
+where
+    T: Copy,
+    T: Mul,
+    <T as Mul>::Output: Copy,
+{
+    pub fn elementwise_mul(&self, rhs: &Self) -> Vec3<<T as Mul>::Output> {
+        Vec3 {
+            x: self.x * rhs.x,
+            y: self.y * rhs.y,
+            z: self.z * rhs.z,
+        }
+    }
+}
+
 impl Vec3<f32> {
     pub fn len(&self) -> f32 {
         self.len_squared().sqrt()
@@ -140,6 +158,15 @@ impl Vec3<f32> {
 
     pub fn normalized(&self) -> Vec3<f32> {
         *self / self.len()
+    }
+
+    pub fn near_zero(&self) -> bool {
+        const CLOSE: f32 = 1e-8;
+        self.x.abs() < CLOSE && self.y.abs() < CLOSE && self.z.abs() < CLOSE
+    }
+
+    pub fn reflect(&self, normal: &Vec3<f32>) -> Vec3<f32> {
+        *self - *normal * self.dot(normal) * 2.0
     }
 }
 
@@ -150,5 +177,70 @@ impl Vec3<f64> {
 
     pub fn normalized(&self) -> Vec3<f64> {
         *self / self.len()
+    }
+
+    pub fn near_zero(&self) -> bool {
+        const CLOSE: f64 = 1e-8;
+        self.x.abs() < CLOSE && self.y.abs() < CLOSE && self.z.abs() < CLOSE
+    }
+
+    pub fn reflect(&self, normal: &Vec3<f64>) -> Vec3<f64> {
+        *self - *normal * self.dot(normal) * 2.0
+    }
+}
+
+#[cfg(feature = "rand")]
+impl Vec3<f32> {
+    pub fn random_unit() -> Vec3<f32> {
+        let mut rng = rand::thread_rng();
+        let x = rng.gen_range(-1.0..1.0);
+        let y = rng.gen_range(-1.0..1.0);
+        let z = rng.gen_range(-1.0..1.0);
+
+        Vec3::<f32> { x, y, z }.normalized()
+    }
+
+    pub fn random_in_unit_disk() -> Vec3<f32> {
+        let mut rng = rand::thread_rng();
+
+        loop {
+            let p = Vec3 {
+                x: rng.gen_range(-1.0..1.0),
+                y: rng.gen_range(-1.0..1.0),
+                z: 0.0,
+            };
+
+            if p.len_squared() < 1.0 {
+                break p;
+            }
+        }
+    }
+}
+
+#[cfg(feature = "rand")]
+impl Vec3<f64> {
+    pub fn random_unit() -> Vec3<f64> {
+        let mut rng = rand::thread_rng();
+        let x = rng.gen_range(-1.0..1.0);
+        let y = rng.gen_range(-1.0..1.0);
+        let z = rng.gen_range(-1.0..1.0);
+
+        Vec3::<f64> { x, y, z }.normalized()
+    }
+
+    pub fn random_in_unit_disk() -> Vec3<f64> {
+        let mut rng = rand::thread_rng();
+
+        loop {
+            let p = Vec3 {
+                x: rng.gen_range(-1.0..1.0),
+                y: rng.gen_range(-1.0..1.0),
+                z: 0.0,
+            };
+
+            if p.len_squared() < 1.0 {
+                break p;
+            }
+        }
     }
 }
