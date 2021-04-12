@@ -192,12 +192,23 @@ impl Vec3<f64> {
 #[cfg(feature = "rand")]
 impl Vec3<f32> {
     pub fn random_unit() -> Vec3<f32> {
-        let mut rng = rand::thread_rng();
-        let x = rng.gen_range(-1.0..1.0);
-        let y = rng.gen_range(-1.0..1.0);
-        let z = rng.gen_range(-1.0..1.0);
+        Self::random_in_unit_sphere().normalized()
+    }
 
-        Vec3::<f32> { x, y, z }.normalized()
+    pub fn random_in_unit_sphere() -> Vec3<f32> {
+        let mut rng = rand::thread_rng();
+
+        loop {
+            let p = Vec3 {
+                x: rng.gen_range(-1.0..1.0),
+                y: rng.gen_range(-1.0..1.0),
+                z: rng.gen_range(-1.0..1.0),
+            };
+
+            if p.len_squared() < 1.0 {
+                break p;
+            }
+        }
     }
 
     pub fn random_in_unit_disk() -> Vec3<f32> {
@@ -220,12 +231,23 @@ impl Vec3<f32> {
 #[cfg(feature = "rand")]
 impl Vec3<f64> {
     pub fn random_unit() -> Vec3<f64> {
-        let mut rng = rand::thread_rng();
-        let x = rng.gen_range(-1.0..1.0);
-        let y = rng.gen_range(-1.0..1.0);
-        let z = rng.gen_range(-1.0..1.0);
+        Self::random_in_unit_sphere().normalized()
+    }
 
-        Vec3::<f64> { x, y, z }.normalized()
+    pub fn random_in_unit_sphere() -> Vec3<f64> {
+        let mut rng = rand::thread_rng();
+
+        loop {
+            let p = Vec3 {
+                x: rng.gen_range(-1.0..1.0),
+                y: rng.gen_range(-1.0..1.0),
+                z: rng.gen_range(-1.0..1.0),
+            };
+
+            if p.len_squared() < 1.0 {
+                break p;
+            }
+        }
     }
 
     pub fn random_in_unit_disk() -> Vec3<f64> {
