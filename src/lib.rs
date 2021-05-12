@@ -191,13 +191,11 @@ impl Vec3<f64> {
 
 #[cfg(feature = "rand")]
 impl Vec3<f32> {
-    pub fn random_unit() -> Vec3<f32> {
-        Self::random_in_unit_sphere().normalized()
+    pub fn random_unit(rng: &mut impl Rng) -> Vec3<f32> {
+        Self::random_in_unit_sphere(rng).normalized()
     }
 
-    pub fn random_in_unit_sphere() -> Vec3<f32> {
-        let mut rng = rand::thread_rng();
-
+    pub fn random_in_unit_sphere(rng: &mut impl Rng) -> Vec3<f32> {
         loop {
             let p = Vec3 {
                 x: rng.gen_range(-1.0..1.0),
@@ -211,9 +209,7 @@ impl Vec3<f32> {
         }
     }
 
-    pub fn random_in_unit_disk() -> Vec3<f32> {
-        let mut rng = rand::thread_rng();
-
+    pub fn random_in_unit_disk(rng: &mut impl Rng) -> Vec3<f32> {
         loop {
             let p = Vec3 {
                 x: rng.gen_range(-1.0..1.0),
@@ -230,13 +226,11 @@ impl Vec3<f32> {
 
 #[cfg(feature = "rand")]
 impl Vec3<f64> {
-    pub fn random_unit() -> Vec3<f64> {
-        Self::random_in_unit_sphere().normalized()
+    pub fn random_unit(rng: &mut impl Rng) -> Vec3<f64> {
+        Self::random_in_unit_sphere(rng).normalized()
     }
 
-    pub fn random_in_unit_sphere() -> Vec3<f64> {
-        let mut rng = rand::thread_rng();
-
+    pub fn random_in_unit_sphere(rng: &mut impl Rng) -> Vec3<f64> {
         loop {
             let p = Vec3 {
                 x: rng.gen_range(-1.0..1.0),
@@ -250,9 +244,7 @@ impl Vec3<f64> {
         }
     }
 
-    pub fn random_in_unit_disk() -> Vec3<f64> {
-        let mut rng = rand::thread_rng();
-
+    pub fn random_in_unit_disk(rng: &mut impl Rng) -> Vec3<f64> {
         loop {
             let p = Vec3 {
                 x: rng.gen_range(-1.0..1.0),
