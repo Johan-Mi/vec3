@@ -91,6 +91,18 @@ where
     }
 }
 
+impl<T> IntoIterator for Vec3<T>
+where
+    T: Copy,
+{
+    type Item = T;
+    type IntoIter = <[T; 3] as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        IntoIterator::into_iter([self.x, self.y, self.z])
+    }
+}
+
 impl<T> Vec3<T>
 where
     T: Copy,
